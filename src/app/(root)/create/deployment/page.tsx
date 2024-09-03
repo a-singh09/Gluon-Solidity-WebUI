@@ -33,7 +33,8 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>               
                   <Input placeholder="Name" className="my-2" />
-                  <Input placeholder="Symbol" className="my-2" />               
+                  <Input placeholder="Symbol" className="my-2" />
+                  <Input placeholder="Token Address" className="my-2" />             
               </CardContent>
             </Card>
 
