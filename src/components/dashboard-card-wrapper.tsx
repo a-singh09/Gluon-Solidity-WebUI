@@ -6,7 +6,7 @@ import DollarSignIcon from 'lucide-react/dist/esm/icons/dollar-sign';
 import { StatCard } from '@/components/stat-card';
 
 const iconMap = {
-    vaults: Wallet2,
+    stakes: Wallet2,
     locked: Coins,
     deployments: Dock,
     avg: DollarSignIcon,
@@ -17,10 +17,10 @@ export default async function CardWrapper() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             <StatCard
-                title="Vaults"
+                title="Stakes"
                 icon={<Wallet2 className="h-6 w-6 text-green-500" />}
                 value='8'
-                description="Total number of vaults"
+                description="Total amount of stakes"
                 className=" h-32 flex items-center"
             />
             <StatCard

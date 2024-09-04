@@ -15,13 +15,13 @@ export const routes: Route[] = [
     },
     {
         icon: CirclePlus,
-        label: 'Create',
-        href: '/create',
+        label: 'Deployment',
+        href: '/create/deployment',
         options: [
             {
                 icon: Vault,
-                label: 'Vault',
-                href: '/create/vault',
+                label: 'Stakes',
+                href: '/create/stake',
             },
             {
                 icon: WalletCards,
