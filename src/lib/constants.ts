@@ -15,7 +15,7 @@ export const routes: Route[] = [
     },
     {
         icon: CirclePlus,
-        label: 'Deployment',
+        label: 'Create',
         href: '/create/deployment',
         options: [
             {
