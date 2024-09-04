@@ -1,19 +1,31 @@
-import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-    CardContent,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-// import Pagination from '@/components/pagination';
-import Link from 'next/link';
+import { Payment, columns } from "../../../components/deployments-table/columns"
+import { DataTable } from "../../../components/deployments-table/data-table"
 
-// const PAGE_SIZE = 6;
+async function getData(): Promise<Payment[]> {
+    // Fetch data from your API here.
+    return [
+        {
+            id: "1",
+            name: "Deployment 1",
+            base_token: "0x0000000000000000000000000000000000000000",
+            tvl: "1000",
+            critical_ratio: "1.5",
+            target_ratio: "2.0",
+        },
+        {
+            id: "2",
+            name: "Deployment 2",
+            base_token: "0x0000000000000000000000000000000000000000",
+            tvl: "2000",
+            critical_ratio: "1.2",
+            target_ratio: "1.8",
+        },
+        // ...
+    ]
+}
 
-export default async function DeploymentsPage() {
-
-    // const totalPages = Math.floor(count / PAGE_SIZE);
+export default async function DemoPage() {
+    const data = await getData()
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -26,38 +38,7 @@ export default async function DeploymentsPage() {
                     you can find and contribute to various funding projects.
                 </p>
             </header>
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                {/* {deployments.length !== 0 ? (
-                    deployments.map((deployment) => ( */}
-                <Card
-                    // key={deployment.id}
-                    className="hover:shadow-lg transition-shadow duration-300"
-                >
-                    <CardHeader>
-                        <CardTitle>Deploment Name</CardTitle>
-                        <CardDescription>
-                            Deployment Description
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-
-                        <Link href={'/deployments/1'}>
-                            <Button className="mt-4 w-full">
-                                View Deployment
-                            </Button>
-                        </Link>
-                    </CardContent>
-                </Card>
-                {/* ))
-                ) : (
-                    <div>No deployments found.</div>
-                )} */}
-            </div>
-            {/* {totalPages > 1 && (
-                <div className="flex w-full justify-between items-center">
-                    <Pagination totalPages={totalPages} />
-                </div>
-            )} */}
+            <DataTable columns={columns} data={data} />
         </div>
-    );
+    )
 }
