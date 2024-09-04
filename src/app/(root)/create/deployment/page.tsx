@@ -26,19 +26,45 @@ export default function Dashboard() {
           <div className="grid gap-6">
             <Card x-chunk="dashboard-04-chunk-1">
               <CardHeader>
-                <CardTitle>Basic Details</CardTitle>
+                <CardTitle>ERC-20 Token</CardTitle>
                 <CardDescription>
-                  Basic details like name of token, symbol etc.
+                  Details about existing ERC-20 token used for deployment
                 </CardDescription>
               </CardHeader>
               <CardContent>               
                   <Input placeholder="Name" className="my-2" />
                   <Input placeholder="Symbol" className="my-2" />
-                  <Input placeholder="Token Address" className="my-2" />             
+                  <Input placeholder="Token Address (existing ERC-20 token)" className="my-2" />             
               </CardContent>
             </Card>
 
             <Card x-chunk="dashboard-04-chunk-2">
+              <CardHeader>
+                <CardTitle>Stable Tokens</CardTitle>
+                <CardDescription>
+                  Details about stable tokens (neutrons) to be minted
+                </CardDescription>
+              </CardHeader>
+              <CardContent>               
+                  <Input placeholder="Name" className="my-2" />
+                  <Input placeholder="Symbol" className="my-2" />          
+              </CardContent>
+            </Card>
+
+            <Card x-chunk="dashboard-04-chunk-3">
+              <CardHeader>
+                <CardTitle>Reserve Tokens</CardTitle>
+                <CardDescription>
+                etails about reserve tokens (protons) to be minted
+                </CardDescription>
+              </CardHeader>
+              <CardContent>               
+                  <Input placeholder="Name" className="my-2" />
+                  <Input placeholder="Symbol" className="my-2" />         
+              </CardContent>
+            </Card>
+
+            <Card x-chunk="dashboard-04-chunk-4">
               <CardHeader>
                 <CardTitle>Treasury Details</CardTitle>
                 <CardDescription>
@@ -52,7 +78,7 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card x-chunk="dashboard-04-chunk-3">
+            <Card x-chunk="dashboard-04-chunk-5">
               <CardHeader>
                 <CardTitle>Ratios and Fees</CardTitle>
                 <CardDescription>
@@ -68,7 +94,7 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card x-chunk="dashboard-04-chunk-4">
+            <Card x-chunk="dashboard-04-chunk-6">
               <CardHeader>
                 <CardTitle>Staking Vaults</CardTitle>
                 <CardDescription>
