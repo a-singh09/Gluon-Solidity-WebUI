@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { Plus, Equal } from 'lucide-react';
-import CardComponent from './card';
+import InteractionCardComponent from './interaction-card';
 
 export default function Interaction({ params, activeTab }: { params: string, activeTab: string }) {
     const [state, setState] = useState({
@@ -29,63 +29,73 @@ export default function Interaction({ params, activeTab }: { params: string, act
             <div className="w-full max-w-md space-y-4">
                 {activeTab === 'fusion' && (
                     <>
-                        <CardComponent
+                        <InteractionCardComponent
                             title="Pay"
                             value={state.pay1}
                             onChange={(e) => setPay1(e.target.value)}
+                            readOnly={true}
+                            tokenName='GAU'
                         />
 
                         <div className="flex justify-center">
                             <Plus className="text-2xl" />
                         </div>
 
-                        <CardComponent
+                        <InteractionCardComponent
                             title="Pay"
                             value={state.pay2}
                             onChange={(e) => setPay2(e.target.value)}
+                            readOnly={true}
+                            tokenName='GAUC'
                         />
 
                         <div className="flex justify-center">
                             <Equal className="text-2xl" />
                         </div>
 
-                        <CardComponent
+                        <InteractionCardComponent
                             title="Receive"
                             value={state.receive}
                             onChange={(e) => setReceive(e.target.value)}
                             buttonText="Calculate"
                             onButtonClick={handleCalculate}
+                            tokenName='ERG'
                         />
                     </>
                 )}
                 {activeTab === 'fission' && (
                     <>
-                        <CardComponent
+                        <InteractionCardComponent
                             title="Pay"
-                            value={state.pay1}
-                            onChange={(e) => setPay1(e.target.value)}
+                            value={state.pay}
+                            onChange={(e) => setPay(e.target.value)}
+                            tokenName='ERG'
                         />
 
                         <div className="flex justify-center">
                             <Equal className="text-2xl" />
                         </div>
 
-                        <CardComponent
+                        <InteractionCardComponent
                             title="Receive"
                             value={state.receive1}
                             onChange={(e) => setReceive1(e.target.value)}
+                            readOnly={true}
+                            tokenName='GAU'
                         />
 
                         <div className="flex justify-center">
                             <Plus className="text-2xl" />
                         </div>
 
-                        <CardComponent
+                        <InteractionCardComponent
                             title="Receive"
                             value={state.receive2}
                             onChange={(e) => setReceive2(e.target.value)}
                             buttonText="Calculate"
                             onButtonClick={handleCalculate}
+                            readOnly={true}
+                            tokenName='GAUC'
                         />
                     </>
                 )}
