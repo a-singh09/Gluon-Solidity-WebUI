@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-// import ConnectWalletButton from "@/components/connect-wallet-button";
+import ConnectWalletButton from "@/components/connect-wallet-button";
 import { ModeToggle } from "@/components/mode-toggle";
 import { routes } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -77,7 +77,7 @@ export default function Navbar() {
             }
           })}
         </div>
-        {/* <ConnectWalletButton /> */}
+        <ConnectWalletButton />
         <ModeToggle />
       </div>
     </nav>
