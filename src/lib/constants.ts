@@ -1,7 +1,5 @@
-import Vault from 'lucide-react/dist/esm/icons/vault';
 import CirclePlus from 'lucide-react/dist/esm/icons/circle-plus';
 import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
-import WalletCards from 'lucide-react/dist/esm/icons/wallet-cards';
 import LayersIcon from 'lucide-react/dist/esm/icons/layers';
 import TextSearch from 'lucide-react/dist/esm/icons/text-search';
 
@@ -28,11 +26,5 @@ export const routes: Route[] = [
                 href: '/deployments',
             },
         ],
-    },
-    {
-        icon: Vault,
-        href: '/stake',
-        label: 'Stake',
-        options: [],
     },
 ];
