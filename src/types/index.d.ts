@@ -7,7 +7,6 @@ declare interface Route {
         href: string;
         label: string;
     }[];
-    protected: boolean;
 }
 
 declare module 'lucide-react/dist/esm/icons/*' {

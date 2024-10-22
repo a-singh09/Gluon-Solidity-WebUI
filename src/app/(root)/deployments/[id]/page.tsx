@@ -17,16 +17,16 @@ export default async function InteractionsPage({
 
 }) {
     const deploymentId = params.id;
-    const [activeTab, setActiveTab] = useState('fusion');
+    // const [activeTab, setActiveTab] = useState('fusion');
     return (
-        <Tabs defaultValue="fusion" className="w-full h-full p-9 box-border overflow-hidden" onValueChange={setActiveTab}>
-            <TabsList className="grid w-44 grid-cols-2">
-                <TabsTrigger value="fusion">Fusion</TabsTrigger>
-                <TabsTrigger value="fission">Fission</TabsTrigger>
-            </TabsList>
+        // <Tabs defaultValue="fusion" className="w-full h-full p-9 box-border overflow-hidden" onValueChange={setActiveTab}>
+        //     <TabsList className="grid w-44 grid-cols-2">
+        //         <TabsTrigger value="fusion">Fusion</TabsTrigger>
+        //         <TabsTrigger value="fission">Fission</TabsTrigger>
+        //     </TabsList>
             <div className="w-full h-full">
-                <Interaction params={deploymentId} activeTab={activeTab} />
+                <Interaction params={deploymentId}/>
             </div>
-        </Tabs>
+        // </Tabs>
     )
 }

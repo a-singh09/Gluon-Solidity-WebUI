@@ -1,105 +1,162 @@
-"use client"
-import React, { useState } from 'react';
-import { Plus, Equal } from 'lucide-react';
-import InteractionCardComponent from './interaction-card';
+"use client";
+import React, { useState } from "react";
+import { MoveRight, MoveLeft } from "lucide-react";
+import InteractionCardComponent from "./interaction-card";
+import { Button } from "@/components/ui/button";
 
-export default function Interaction({ params, activeTab }: { params: string, activeTab: string }) {
-    const [state, setState] = useState({
-        pay: '',
-        pay1: '',
-        pay2: '',
-        receive: '',
-        receive1: '',
-        receive2: ''
-    });
+export default function Interaction({ params }: { params: string }) {
+  const [mode, setMode] = useState<"fission" | "fusion">("fission");
+  const [stakeMode, setStakeMode] = useState<"stake" | "unstake">("stake");
+  const [baseToken, setBaseToken] = useState<string>("");
+  const [stableToken, setStableToken] = useState<string>("");
+  const [reserveToken, setReserveToken] = useState<string>("");
+  const [stakedStableToken, setStakedStableToken] = useState<string>("");
+  const [stakedReserveToken, setStakedReserveToken] = useState<string>("");
 
-    const setPay = (value: string) => setState(prevState => ({ ...prevState, pay: value }));
-    const setPay1 = (value: string) => setState(prevState => ({ ...prevState, pay1: value }));
-    const setPay2 = (value: string) => setState(prevState => ({ ...prevState, pay2: value }));
-    const setReceive = (value: string) => setState(prevState => ({ ...prevState, receive: value }));
-    const setReceive1 = (value: string) => setState(prevState => ({ ...prevState, receive1: value }));
-    const setReceive2 = (value: string) => setState(prevState => ({ ...prevState, receive2: value }));
+  const isFissionMode = mode === "fission";
+  const isStakeMode = stakeMode === "stake";
 
-    const handleCalculate = () => {
-        // Calculation logic here
-    };
+  const handleModeSwitch = (newMode: "fission" | "fusion") => {
+    setMode(newMode);
+    setBaseToken("");
+    setStableToken("");
+    setReserveToken("");
+  };
 
-    return (
-        <div className="flex justify-center items-center w-full h-full">
-            <div className="w-full max-w-md space-y-4">
-                {activeTab === 'fusion' && (
-                    <>
-                        <InteractionCardComponent
-                            title="Pay"
-                            value={state.pay1}
-                            onChange={(e) => setPay1(e.target.value)}
-                            readOnly={true}
-                            tokenName='GAU'
-                        />
+  const handleStakeModeSwitch = (newMode: "stake" | "unstake") => {
+    setStakeMode(newMode);
+    setStakedStableToken("");
+    setStakedReserveToken("");
+  };
 
-                        <div className="flex justify-center">
-                            <Plus className="text-2xl" />
-                        </div>
+  const handleExecute = () => {
+    // Placeholder for executing the fission/fusion transaction logic
+  };
 
-                        <InteractionCardComponent
-                            title="Pay"
-                            value={state.pay2}
-                            onChange={(e) => setPay2(e.target.value)}
-                            readOnly={true}
-                            tokenName='GAUC'
-                        />
-
-                        <div className="flex justify-center">
-                            <Equal className="text-2xl" />
-                        </div>
-
-                        <InteractionCardComponent
-                            title="Receive"
-                            value={state.receive}
-                            onChange={(e) => setReceive(e.target.value)}
-                            buttonText="Calculate"
-                            onButtonClick={handleCalculate}
-                            tokenName='ERG'
-                        />
-                    </>
-                )}
-                {activeTab === 'fission' && (
-                    <>
-                        <InteractionCardComponent
-                            title="Pay"
-                            value={state.pay}
-                            onChange={(e) => setPay(e.target.value)}
-                            tokenName='ERG'
-                        />
-
-                        <div className="flex justify-center">
-                            <Equal className="text-2xl" />
-                        </div>
-
-                        <InteractionCardComponent
-                            title="Receive"
-                            value={state.receive1}
-                            onChange={(e) => setReceive1(e.target.value)}
-                            readOnly={true}
-                            tokenName='GAU'
-                        />
-
-                        <div className="flex justify-center">
-                            <Plus className="text-2xl" />
-                        </div>
-
-                        <InteractionCardComponent
-                            title="Receive"
-                            value={state.receive2}
-                            onChange={(e) => setReceive2(e.target.value)}
-                            buttonText="Calculate"
-                            onButtonClick={handleCalculate}
-                            readOnly={true}
-                            tokenName='GAUC'
-                        />
-                    </>
-                )}
-            </div>
+  return (
+    <>
+      <div className="m-10">
+        {/* Deployment ID */}
+        <div className=" justify-center text-xl">
+          {" "}
+          <span className="font-extrabold mr-1">Deployment Address: </span>
+          0x00000000000000000
         </div>
-    );
+        <div className=" justify-center text-xl">
+          {" "}
+          <span className="font-extrabold mr-1">Reserve: </span>
+          80
+        </div>
+        <div className=" justify-center text-xl">
+          {" "}
+          <span className="font-extrabold mr-1">Supply: </span>
+          20
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-center items-center w-full space-y-4">
+        {/* Main Interaction Section */}
+        <div className="flex items-center space-x-4">
+          {/* Left Side - Give (XYZ) */}
+          <InteractionCardComponent
+            title="Base Token"
+            value={baseToken}
+            onChange={(e) => setBaseToken(e.target.value)}
+            // readOnly={isFissionMode ? false : true}
+            tokenName="XYZ"
+          />
+
+          {/* Arrow */}
+          <div className="flex flex-col items-center space-y-2">
+            <Button
+              variant={isFissionMode ? "default" : "outline"}
+              onClick={() => handleModeSwitch("fission")}
+              className="w-full"
+            >
+              Fission
+            </Button>
+            <Button
+              variant={!isFissionMode ? "default" : "outline"}
+              onClick={() => handleModeSwitch("fusion")}
+              className="w-full"
+            >
+              Fusion
+            </Button>
+            {isFissionMode ? (
+              <MoveRight className="w-12 h-12" />
+            ) : (
+              <MoveLeft className="w-12 h-12" />
+            )}
+            <Button variant="default" className="w-full">
+              Execute
+            </Button>
+          </div>
+
+          {/* Right Side - Receive (XYZN, XYZP) */}
+          <div className="space-y-4">
+            <InteractionCardComponent
+              title="Stable Token (Neutron)"
+              value={stableToken}
+              onChange={(e) => setStableToken(e.target.value)}
+              // readOnly={isFissionMode ? true : false}
+              tokenName="XYZN"
+            />
+
+            <InteractionCardComponent
+              title="Reserve Token (Proton)"
+              value={reserveToken}
+              onChange={(e) => setReserveToken(e.target.value)}
+              // readOnly={isFissionMode ? true : false}
+              tokenName="XYZP"
+            />
+          </div>
+
+          {/* Arrow */}
+          <div className="flex flex-col items-center space-y-2">
+            <Button
+              variant={isStakeMode ? "default" : "outline"}
+              onClick={() => handleStakeModeSwitch("stake")}
+              className="w-full"
+            >
+              Stake
+            </Button>
+            <Button
+              variant={!isStakeMode ? "default" : "outline"}
+              onClick={() => handleStakeModeSwitch("unstake")}
+              className="w-full"
+            >
+              Unstake
+            </Button>
+            {isStakeMode ? (
+              <MoveRight className="w-12 h-12" />
+            ) : (
+              <MoveLeft className="w-12 h-12" />
+            )}
+            <Button variant="default" className="w-full">
+              Execute
+            </Button>
+          </div>
+
+          {/* Right Side - Receive (hXYZN, hXYZP) */}
+          <div className="space-y-4">
+            <InteractionCardComponent
+              title="Staked Stable Token"
+              value={stakedStableToken}
+              onChange={(e) => setStakedStableToken(e.target.value)}
+              // readOnly={isFissionMode ? true : false}
+              tokenName="hXYZN"
+            />
+
+            <InteractionCardComponent
+              title="Staked Reserve Token"
+              value={stakedReserveToken}
+              onChange={(e) => setStakedReserveToken(e.target.value)}
+              // readOnly={isFissionMode ? true : false}
+              tokenName="hXYZP"
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }

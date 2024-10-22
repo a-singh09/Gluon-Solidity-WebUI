@@ -7,15 +7,15 @@ interface InteractionCardComponentProps {
     title: string;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    readOnly?: boolean;
-    buttonText?: string;
-    onButtonClick?: () => void;
+    // readOnly?: boolean;
+    // buttonText?: string;
+    // onButtonClick?: () => void;
     tokenName?: string;
 }
 
-const InteractionCardComponent: React.FC<InteractionCardComponentProps> = ({ title, value, onChange, readOnly = false, buttonText, onButtonClick, tokenName }) => {
+const InteractionCardComponent: React.FC<InteractionCardComponentProps> = ({ title, value, onChange, tokenName }) => {
     return (
-        <Card className="w-full">
+        <Card className="w-80 h-40">
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
             </CardHeader>
@@ -26,19 +26,19 @@ const InteractionCardComponent: React.FC<InteractionCardComponentProps> = ({ tit
                             id={title.toLowerCase()}
                             value={value}
                             onChange={onChange}
-                            readOnly={readOnly}
-                            className={`border-none focus:ring-0 focus:ring-transparent focus:outline-none focus-visible:ring-0 focus-visible:outline-none bg-transparent shadow-none font-bold text-xl ${readOnly ? 'cursor-not-allowed' : ''}`}
+                            // readOnly={readOnly}
+                            className="border-none focus:ring-0 focus:ring-transparent focus:outline-none focus-visible:ring-0 focus-visible:outline-none bg-transparent shadow-none font-bold text-3xl"
                             placeholder="0.00"
                         />
                         <span className="text-gray-500 font-bold text-xl">{tokenName}</span>
                     </div>
                 </div>
             </CardContent>
-            {buttonText && onButtonClick && (
+            {/* {buttonText && onButtonClick && (
                 <CardFooter>
                     <Button onClick={onButtonClick}>{buttonText}</Button>
                 </CardFooter>
-            )}
+            )} */}
         </Card>
     );
 };

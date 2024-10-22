@@ -94,6 +94,20 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
+            <Card x-chunk="dashboard-04-chunk-7">
+              <CardHeader>
+                <CardTitle>Additional Fees</CardTitle>
+                <CardDescription>
+                  Configuration of additional fees.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Input placeholder="Reserve Fee" className="my-2" />
+                <Input placeholder="Vault Creator Fee" className="my-2" />
+                <Input placeholder="Dev Fee" className="my-2" />
+              </CardContent>
+            </Card>
+
             <Card x-chunk="dashboard-04-chunk-6">
               <CardHeader>
                 <CardTitle>Staking Vaults</CardTitle>
