@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { Button } from "@/components/ui/button";
 
@@ -20,8 +21,10 @@ export default function Home() {
             </div>
           </h2>
           <div className="flex space-x-4">
-            <Button className="text-lg rounded-full mt-5 font-bold bg-slate-500">Get Started</Button>
-            <Button className="text-lg rounded-full mt-5 bg-gray-300 text-black hover:text-white">Read Whitepaper</Button>
+          <Link href="/dashboard">
+            <Button className="text-lg rounded-full mt-5 font-bold bg-slate-500 text-white hover:bg-black">Get Started</Button>
+            </Link>
+            <Button className="text-lg rounded-full mt-5 bg-gray-300 text-black hover:text-white hover:bg-black">Read Whitepaper</Button>
           </div>
         </div>
       </BackgroundBeamsWithCollision>
