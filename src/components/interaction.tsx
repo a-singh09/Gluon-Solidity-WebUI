@@ -3,159 +3,179 @@ import React, { useState } from "react";
 import { MoveRight, MoveLeft } from "lucide-react";
 import InteractionCardComponent from "./interaction-card";
 import { Button } from "@/components/ui/button";
+import Metrics from "./metrics";
 
 export default function Interaction({ params }: { params: string }) {
-  const [mode, setMode] = useState<"fission" | "fusion">("fission");
-  const [stakeMode, setStakeMode] = useState<"stake" | "unstake">("stake");
+  const [operation, setOperation] = useState<
+    "fission" | "fusion" | "stake" | "unstake"
+  >("fission");
   const [baseToken, setBaseToken] = useState<string>("");
   const [stableToken, setStableToken] = useState<string>("");
   const [reserveToken, setReserveToken] = useState<string>("");
   const [stakedStableToken, setStakedStableToken] = useState<string>("");
   const [stakedReserveToken, setStakedReserveToken] = useState<string>("");
 
-  const isFissionMode = mode === "fission";
-  const isStakeMode = stakeMode === "stake";
+  const isFissionMode = operation === "fission";
+  const isFusionMode = operation === "fusion";
+  const isStakeMode = operation === "stake";
+  const isUnstakeMode = operation === "unstake";
 
-  const handleModeSwitch = (newMode: "fission" | "fusion") => {
-    setMode(newMode);
+  const handleOperationSwitch = (newOperation: typeof operation) => {
+    setOperation(newOperation);
     setBaseToken("");
     setStableToken("");
     setReserveToken("");
-  };
-
-  const handleStakeModeSwitch = (newMode: "stake" | "unstake") => {
-    setStakeMode(newMode);
     setStakedStableToken("");
     setStakedReserveToken("");
   };
 
   const handleExecute = () => {
-    // Placeholder for executing the fission/fusion transaction logic
+    console.log("Executing:", operation);
   };
+
+  const metrics = [
+    { label: "Supply", value: "500 321 XYZL\n205 738 XYZS" },
+    { label: "Backing", value: "TVL: 1 000 000 XYZ \n10% of XYZ's supply" },
+    { label: "Prices", value: "1 XYZS = 2 XYZ \n1 XYZL = 1.5 XYZ \n1 sXYZS = 1.3 XYZS \n1 SXYZL = 1.6 XYZL" },
+    { label: "Reserve Ratio", value: "50%" },
+    { label: "Percentage Staked", value: "30%" },
+  ];
 
   return (
     <>
-      <div className="m-10">
-        {/* Deployment ID */}
-        <div className=" justify-center text-xl">
-          {" "}
-          <span className="font-extrabold mr-1">Deployment Address: </span>
-          0x00000000000000000
-        </div>
-        <div className=" justify-center text-xl">
-          {" "}
-          <span className="font-extrabold mr-1">Reserve: </span>
-          80
-        </div>
-        <div className=" justify-center text-xl">
-          {" "}
-          <span className="font-extrabold mr-1">Supply: </span>
-          20
+      <div className="m-10 text-left space-y-2">
+        <div className="text-xl font-extrabold">
+          Deployment Address:{" "}
+          <span className="font-normal">0x00000000000000000</span>
         </div>
       </div>
 
-      <div className="flex flex-col justify-center items-center w-full space-y-4">
+      <div className="flex flex-col items-center space-y-8">
+        {/* Operation Buttons */}
+        <div className="flex space-x-4">
+          {["fission", "fusion", "stake", "unstake"].map((op) => (
+            <Button
+              key={op}
+              variant={operation === op ? "default" : "outline"}
+              onClick={() => handleOperationSwitch(op as typeof operation)}
+            >
+              {op.charAt(0).toUpperCase() + op.slice(1)}
+            </Button>
+          ))}
+        </div>
+
         {/* Main Interaction Section */}
-        <div className="flex items-center space-x-4">
-          {/* Left Side - Give (XYZ) */}
+        <div className="flex items-center space-x-8">
+          {/* Token Inputs */}
           <InteractionCardComponent
             title="Base Token"
             value={baseToken}
             onChange={(e) => setBaseToken(e.target.value)}
-            // readOnly={isFissionMode ? false : true}
+            balance="20"
             tokenName="XYZ"
+            isEditable={isFissionMode}
+            isRelevant={isFissionMode || isFusionMode}
           />
 
-          {/* Arrow */}
-          <div className="flex flex-col items-center space-y-2">
-            <Button
-              variant={isFissionMode ? "default" : "outline"}
-              onClick={() => handleModeSwitch("fission")}
-              className="w-full"
-            >
-              Fission
-            </Button>
-            <Button
-              variant={!isFissionMode ? "default" : "outline"}
-              onClick={() => handleModeSwitch("fusion")}
-              className="w-full"
-            >
-              Fusion
-            </Button>
-            {isFissionMode ? (
-              <MoveRight className="w-12 h-12" />
+          {/* Arrow & Execute Button */}
+          <div className="flex flex-col items-center space-y-4">
+            {/* First Arrow */}
+            {isFusionMode ? (
+              <MoveLeft
+                className={`w-8 h-8 transform -rotate-45 transition-transform ${operation === "fusion" ? "border-dashed" : ""}`}
+              />
             ) : (
-              <MoveLeft className="w-12 h-12" />
+              <MoveRight className="w-8 h-8 transform -rotate-45 transition-transform" />
             )}
-            <Button variant="default" className="w-full">
-              Execute
-            </Button>
+
+            {/* Second Arrow */}
+            {isFusionMode ? (
+              <MoveLeft
+                className={`w-8 h-8 transform rotate-45 transition-transform ${operation === "fusion" ? "border-dashed" : ""}`}
+              />
+            ) : (
+              <MoveRight className="w-8 h-8 transform rotate-45 transition-transform" />
+            )}
           </div>
 
-          {/* Right Side - Receive (XYZN, XYZP) */}
+          {/* Output Tokens */}
           <div className="space-y-4">
             <InteractionCardComponent
               title="Stable Token (Neutron)"
               value={stableToken}
               onChange={(e) => setStableToken(e.target.value)}
-              // readOnly={isFissionMode ? true : false}
+              balance="20"
               tokenName="XYZN"
+              isEditable={isFusionMode || isStakeMode}
+              isRelevant={true}
             />
-
             <InteractionCardComponent
               title="Reserve Token (Proton)"
               value={reserveToken}
               onChange={(e) => setReserveToken(e.target.value)}
-              // readOnly={isFissionMode ? true : false}
+              balance="20"
               tokenName="XYZP"
+              isEditable={isFusionMode || isStakeMode}
+              isRelevant={true}
             />
+            <Button
+              variant="destructive"
+              onClick={handleExecute}
+              className="w-full"
+            >
+              Execute{" "}
+              {`${operation.charAt(0).toUpperCase()}${operation.slice(1)}`}
+            </Button>
           </div>
 
-          {/* Arrow */}
-          <div className="flex flex-col items-center space-y-2">
-            <Button
-              variant={isStakeMode ? "default" : "outline"}
-              onClick={() => handleStakeModeSwitch("stake")}
-              className="w-full"
-            >
-              Stake
-            </Button>
-            <Button
-              variant={!isStakeMode ? "default" : "outline"}
-              onClick={() => handleStakeModeSwitch("unstake")}
-              className="w-full"
-            >
-              Unstake
-            </Button>
-            {isStakeMode ? (
-              <MoveRight className="w-12 h-12" />
+          <div className="flex flex-col items-center space-y-4">
+            {/* First Arrow */}
+            {isUnstakeMode ? (
+              <MoveLeft
+                className={`w-8 h-8 transform -rotate-45 transition-transform ${operation === "unstake" ? "border-dashed" : ""}`}
+              />
             ) : (
-              <MoveLeft className="w-12 h-12" />
+              <MoveRight className="w-8 h-8 transform -rotate-45 transition-transform" />
             )}
-            <Button variant="default" className="w-full">
-              Execute
-            </Button>
+
+            {/* Second Arrow */}
+            {isUnstakeMode ? (
+              <MoveLeft
+                className={`w-8 h-8 transform rotate-45 transition-transform ${operation === "unstake" ? "border-dashed" : ""}`}
+              />
+            ) : (
+              <MoveRight className="w-8 h-8 transform rotate-45 transition-transform" />
+            )}
           </div>
 
-          {/* Right Side - Receive (hXYZN, hXYZP) */}
-          <div className="space-y-4">
-            <InteractionCardComponent
-              title="Staked Stable Token"
-              value={stakedStableToken}
-              onChange={(e) => setStakedStableToken(e.target.value)}
-              // readOnly={isFissionMode ? true : false}
-              tokenName="hXYZN"
-            />
-
-            <InteractionCardComponent
-              title="Staked Reserve Token"
-              value={stakedReserveToken}
-              onChange={(e) => setStakedReserveToken(e.target.value)}
-              // readOnly={isFissionMode ? true : false}
-              tokenName="hXYZP"
-            />
+          {/* Staked Token Section */}
+          <div className="flex items-center space-x-8">
+            <div className="space-y-4 mb-12">
+              <InteractionCardComponent
+                title="Staked Stable Token"
+                value={stakedStableToken}
+                onChange={(e) => setStakedStableToken(e.target.value)}
+                balance="20"
+                tokenName="hXYZN"
+                isEditable={isUnstakeMode}
+                isRelevant={isStakeMode || isUnstakeMode}
+              />
+              <InteractionCardComponent
+                title="Staked Reserve Token"
+                value={stakedReserveToken}
+                onChange={(e) => setStakedReserveToken(e.target.value)}
+                balance="20"
+                tokenName="hXYZP"
+                isEditable={isUnstakeMode}
+                isRelevant={isStakeMode || isUnstakeMode}
+              />
+            </div>
           </div>
         </div>
+      </div>
+      {/* Metrics Display */}
+      <div className="mx-2">
+        <Metrics metrics={metrics} />
       </div>
     </>
   );
