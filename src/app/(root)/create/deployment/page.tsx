@@ -1,17 +1,8 @@
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
+import React from "react";
+import FormCard from "@/components/form-card";
 
 export const description =
-  "A settings page. The settings page has a sidebar navigation and a main content area. The main content area has a form to update the store name and a form to update the plugins directory. The sidebar navigation has links to general, security, integrations, support, organizations, and advanced settings."
+  "A settings page. The settings page has a sidebar navigation and a main content area. The main content area has a form to update the store name and a form to update the plugins directory. The sidebar navigation has links to general, security, integrations, support, organizations, and advanced settings.";
 
 export default function Dashboard() {
   return (
@@ -22,110 +13,73 @@ export default function Dashboard() {
           <h3 className="text-pretty text-base ml-1 text-zinc-400">Fill this form to create new Deployment</h3>
         </div>
         <div className="mx-auto w-full max-w-6xl items-start gap-6">
-          
           <div className="grid gap-6">
-            <Card x-chunk="dashboard-04-chunk-1">
-              <CardHeader>
-                <CardTitle>ERC-20 Token</CardTitle>
-                <CardDescription>
-                  Details about existing ERC-20 token used for deployment
-                </CardDescription>
-              </CardHeader>
-              <CardContent>               
-                  <Input placeholder="Name" className="my-2" />
-                  <Input placeholder="Symbol" className="my-2" />
-                  <Input placeholder="Token Address (existing ERC-20 token)" className="my-2" />             
-              </CardContent>
-            </Card>
-
-            <Card x-chunk="dashboard-04-chunk-2">
-              <CardHeader>
-                <CardTitle>Stable Tokens</CardTitle>
-                <CardDescription>
-                  Details about stable tokens (neutrons) to be minted
-                </CardDescription>
-              </CardHeader>
-              <CardContent>               
-                  <Input placeholder="Name" className="my-2" />
-                  <Input placeholder="Symbol" className="my-2" />          
-              </CardContent>
-            </Card>
-
-            <Card x-chunk="dashboard-04-chunk-3">
-              <CardHeader>
-                <CardTitle>Reserve Tokens</CardTitle>
-                <CardDescription>
-                etails about reserve tokens (protons) to be minted
-                </CardDescription>
-              </CardHeader>
-              <CardContent>               
-                  <Input placeholder="Name" className="my-2" />
-                  <Input placeholder="Symbol" className="my-2" />         
-              </CardContent>
-            </Card>
-
-            <Card x-chunk="dashboard-04-chunk-4">
-              <CardHeader>
-                <CardTitle>Treasury Details</CardTitle>
-                <CardDescription>
-                  Details related to the treasury configuration.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Input placeholder="Treasury Address" className="my-2" />
-                <Input placeholder="Initial Treasury Fee" className="my-2" />
-                <Input placeholder="Treasury Revenue Target" className="my-2" />
-              </CardContent>
-            </Card>
-
-            <Card x-chunk="dashboard-04-chunk-5">
-              <CardHeader>
-                <CardTitle>Ratios and Fees</CardTitle>
-                <CardDescription>
-                  Configuration of critical and target ratios, and fees for fission and fusion.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Input placeholder="Critical Ratio" className="my-2" />
-                <Input placeholder="Target Ratio" className="my-2" />
-                <Input placeholder="Fee for Fission" className="my-2" />
-                <Input placeholder="Fee for Fusion" className="my-2" />
-                <Input placeholder="Decay Rate" className="my-2" />
-              </CardContent>
-            </Card>
-
-            <Card x-chunk="dashboard-04-chunk-7">
-              <CardHeader>
-                <CardTitle>Additional Fees</CardTitle>
-                <CardDescription>
-                  Configuration of additional fees.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Input placeholder="Reserve Fee" className="my-2" />
-                <Input placeholder="Vault Creator Fee" className="my-2" />
-                <Input placeholder="Dev Fee" className="my-2" />
-              </CardContent>
-            </Card>
-
-            <Card x-chunk="dashboard-04-chunk-6">
-              <CardHeader>
-                <CardTitle>Staking Vaults</CardTitle>
-                <CardDescription>
-                  Addresses for neutron and proton staking vaults.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Input placeholder="Neutron Staking Vault Address" className="my-2" />
-                <Input placeholder="Proton Staking Vault Address" className="my-2" />
-              </CardContent>
-              <CardFooter className="border-t px-6 py-4">
-                <Button>Save</Button>
-              </CardFooter>
-            </Card>
+            <FormCard
+              title="ERC-20 Token"
+              description="Details about existing ERC-20 token used for deployment"
+              inputs={[
+                { placeholder: "Name" },
+                { placeholder: "Symbol" },
+                { placeholder: "Token Address (existing ERC-20 token)" },
+              ]}
+            />
+            <FormCard
+              title="Stable Tokens"
+              description="Details about stable tokens (neutrons) to be minted"
+              inputs={[
+                { placeholder: "Name" },
+                { placeholder: "Symbol" },
+              ]}
+            />
+            <FormCard
+              title="Reserve Tokens"
+              description="Details about reserve tokens (protons) to be minted"
+              inputs={[
+                { placeholder: "Name" },
+                { placeholder: "Symbol" },
+              ]}
+            />
+            <FormCard
+              title="Treasury Details"
+              description="Details related to the treasury configuration."
+              inputs={[
+                { placeholder: "Treasury Address" },
+                { placeholder: "Initial Treasury Fee" },
+                { placeholder: "Treasury Revenue Target" },
+              ]}
+            />
+            <FormCard
+              title="Ratios and Fees"
+              description="Configuration of critical and target ratios, and fees for fission and fusion."
+              inputs={[
+                { placeholder: "Critical Ratio" },
+                { placeholder: "Target Ratio" },
+                { placeholder: "Fee for Fission" },
+                { placeholder: "Fee for Fusion" },
+                { placeholder: "Decay Rate" },
+              ]}
+            />
+            <FormCard
+              title="Additional Fees"
+              description="Configuration of additional fees."
+              inputs={[
+                { placeholder: "Reserve Fee" },
+                { placeholder: "Vault Creator Fee" },
+                { placeholder: "Dev Fee" },
+              ]}
+            />
+            <FormCard
+              title="Staking Vaults"
+              description="Addresses for neutron and proton staking vaults."
+              inputs={[
+                { placeholder: "Neutron Staking Vault Address" },
+                { placeholder: "Proton Staking Vault Address" },
+              ]}
+              footerButtonText="Save"
+            />
           </div>
         </div>
       </main>
     </div>
-  )
+  );
 }
