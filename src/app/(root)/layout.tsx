@@ -11,11 +11,11 @@ export default async function ApplicationLayout({
     children: React.ReactNode;
 }>) {
 
-    const initialState = cookieToInitialState(config, headers().get('cookie'));
+    // const initialState = cookieToInitialState(config, headers().get('cookie'));
 
     return (
         <div className="h-screen">
-            <Web3ModalProvider initialState={initialState}>
+            <Web3ModalProvider>
             <Navbar />
             <main className="h-full pt-[70px]">{children}</main>
             {/* <Toaster /> */}

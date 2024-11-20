@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MoveRight, MoveLeft } from "lucide-react";
 import InteractionCardComponent from "./interaction-card";
 import { Button } from "@/components/ui/button";
@@ -40,6 +40,18 @@ export default function Interaction({ params }: { params: string }) {
     { label: "Reserve Ratio", value: "50%" },
     { label: "Percentage Staked", value: "30%" },
   ];
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        handleOperationSwitch('fission');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   return (
     <>
