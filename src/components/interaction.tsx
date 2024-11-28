@@ -4,8 +4,13 @@ import { MoveRight, MoveLeft } from "lucide-react";
 import InteractionCardComponent from "./interaction-card";
 import { Button } from "@/components/ui/button";
 import Metrics from "./metrics";
+import Footer from "./footer";
 
-export default function Interaction({ params }: { params: string }) {
+export default function Interaction({
+  baseTokenAddress,
+}: {
+  baseTokenAddress: string;
+}) {
   const [operation, setOperation] = useState<
     "fission" | "fusion" | "stake" | "unstake"
   >("fission");
@@ -36,35 +41,32 @@ export default function Interaction({ params }: { params: string }) {
   const metrics = [
     { label: "Supply", value: "500 321 XYZL\n205 738 XYZS" },
     { label: "Backing", value: "TVL: 1 000 000 XYZ \n10% of XYZ's supply" },
-    { label: "Prices", value: "1 XYZS = 2 XYZ \n1 XYZL = 1.5 XYZ \n1 sXYZS = 1.3 XYZS \n1 SXYZL = 1.6 XYZL" },
+    {
+      label: "Prices",
+      value:
+        "1 XYZS = 2 XYZ \n1 XYZL = 1.5 XYZ \n1 sXYZS = 1.3 XYZS \n1 SXYZL = 1.6 XYZL",
+    },
     { label: "Reserve Ratio", value: "50%" },
     { label: "Percentage Staked", value: "30%" },
   ];
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '');
+      const hash = window.location.hash.replace("#", "");
       if (hash) {
-        handleOperationSwitch('fission');
+        handleOperationSwitch("fission");
       }
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
   return (
     <>
-      <div className="m-10 text-left space-y-2">
-        <div className="text-xl font-extrabold">
-          Deployment Address:{" "}
-          <span className="font-normal">0x00000000000000000</span>
-        </div>
-      </div>
-
       <div className="flex flex-col items-center space-y-8">
         {/* Operation Buttons */}
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 mt-10">
           {["fission", "fusion", "stake", "unstake"].map((op) => (
             <Button
               key={op}
@@ -131,9 +133,9 @@ export default function Interaction({ params }: { params: string }) {
               isRelevant={true}
             />
             <Button
-              variant="destructive"
+              // variant="destructive"
               onClick={handleExecute}
-              className="w-full"
+              className="w-full bg-amber-500"
             >
               Execute{" "}
               {`${operation.charAt(0).toUpperCase()}${operation.slice(1)}`}
@@ -184,11 +186,12 @@ export default function Interaction({ params }: { params: string }) {
             </div>
           </div>
         </div>
+        {/* Metrics Display */}
+        <div className="mx-2">
+          <Metrics metrics={metrics} />
+        </div>
       </div>
-      {/* Metrics Display */}
-      <div className="mx-2">
-        <Metrics metrics={metrics} />
-      </div>
+      <Footer deploymentAddress={baseTokenAddress} />
     </>
   );
 }

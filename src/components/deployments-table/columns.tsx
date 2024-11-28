@@ -81,7 +81,7 @@ export const columns: ColumnDef<Payment>[] = [
       const deployment = row.id
 
       return (
-        <Link href={`/deployments/id#${deployment}`}>
+        <Link href={`/deployments/address#${deployment}`}>
           <Button variant="secondary">More<MoveUpRight /></Button>
         </Link>
       )

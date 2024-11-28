@@ -3,22 +3,22 @@ import { useEffect, useState } from 'react';
 import Interaction from "@/components/interaction";
 
 export default function InteractionClient({
-    initialId,
+    initialAddress,
 }: {
-    initialId: string;
+    initialAddress: string;
 }) {
-    const [deploymentId, setDeploymentId] = useState<string>(initialId);
+    const [baseTokenAddress, setbaseTokenAddress] = useState<string>(initialAddress);
 
     useEffect(() => {
         const hash = window.location.hash.replace('#', '');
         if (hash) {
-            setDeploymentId(hash);
+            setbaseTokenAddress(hash);
         }
     }, []);
 
     return (
         <div className="w-full h-full">
-            <Interaction params={deploymentId}/>
+            <Interaction baseTokenAddress={baseTokenAddress} />
         </div>
     );
 } 

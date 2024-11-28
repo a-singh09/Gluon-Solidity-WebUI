@@ -24,7 +24,7 @@ async function getData(): Promise<Payment[]> {
     ]
 }
 
-export default async function DemoPage() {
+export default async function DeploymentsPage() {
     const data = await getData()
 
     return (
