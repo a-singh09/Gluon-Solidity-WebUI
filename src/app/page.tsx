@@ -40,7 +40,7 @@ export default function Home() {
             <Button className="text-lg rounded-full mt-5 bg-gray-300 text-black hover:text-white hover:bg-black">
               Read Paper
             </Button> */}
-            <Link href="/create/deployment">
+            <Link href="/create">
               <Button className="text-lg rounded-full mt-5 font-bold bg-slate-500 text-white hover:bg-black">
                 Create Stablecoin
               </Button>

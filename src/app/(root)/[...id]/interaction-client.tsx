@@ -7,18 +7,18 @@ export default function InteractionClient({
 }: {
     initialAddress: string;
 }) {
-    const [baseTokenAddress, setbaseTokenAddress] = useState<string>(initialAddress);
+    const [deploymentAddress, setdeploymentAddress] = useState<string>(initialAddress);
 
     useEffect(() => {
         const hash = window.location.hash.replace('#', '');
         if (hash) {
-            setbaseTokenAddress(hash);
+            setdeploymentAddress(hash);
         }
     }, []);
 
     return (
         <div className="w-full h-full">
-            <Interaction baseTokenAddress={baseTokenAddress} />
+            <Interaction deploymentAddress={deploymentAddress} />
         </div>
     );
 } 

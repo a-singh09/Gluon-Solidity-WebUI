@@ -14,6 +14,6 @@ export default function InteractionsPage({
         id: string[];
     };
 }) {
-    const baseTokenAddress = params.id[0];
-    return <InteractionClient initialAddress={baseTokenAddress} />;
+    const deploymentAddress = params.id[0];
+    return <InteractionClient initialAddress={deploymentAddress} />;
 }

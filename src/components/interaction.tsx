@@ -7,9 +7,9 @@ import Metrics from "./metrics";
 import Footer from "./footer";
 
 export default function Interaction({
-  baseTokenAddress,
+  deploymentAddress,
 }: {
-  baseTokenAddress: string;
+  deploymentAddress: string;
 }) {
   const [operation, setOperation] = useState<
     "fission" | "fusion" | "stake" | "unstake"
@@ -49,18 +49,6 @@ export default function Interaction({
     { label: "Reserve Ratio", value: "50%" },
     { label: "Percentage Staked", value: "30%" },
   ];
-
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace("#", "");
-      if (hash) {
-        handleOperationSwitch("fission");
-      }
-    };
-
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
 
   return (
     <>
@@ -191,7 +179,7 @@ export default function Interaction({
           <Metrics metrics={metrics} />
         </div>
       </div>
-      <Footer deploymentAddress={baseTokenAddress} />
+      <Footer deploymentAddress={deploymentAddress} />
     </>
   );
 }
