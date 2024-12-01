@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import PromptDialogBox from "@/components/prompt-dialog-box";
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
         <div className="flex flex-col items-center space-y-4">
           <div className="w-64 h-64 mb-4">
             <Image
-              src="/GluonProtocol-Darker.svg"
+              src="/GluonProtocol-Darker_iewpww.svg"
               alt="Gluon Protocol Logo"
               width={256}
               height={256}
@@ -31,10 +32,22 @@ export default function Home() {
             </div>
           </h2>
           <div className="flex space-x-4">
-          <Link href="/dashboard">
-            <Button className="text-lg rounded-full mt-5 font-bold bg-slate-500 text-white hover:bg-black">Get Started</Button>
+            {/* <Link href="/dashboard">
+              <Button className="text-lg rounded-full mt-5 font-bold bg-slate-500 text-white hover:bg-black">
+                Get Started
+              </Button>
             </Link>
-            <Button className="text-lg rounded-full mt-5 bg-gray-300 text-black hover:text-white hover:bg-black">Read Paper</Button>
+            <Button className="text-lg rounded-full mt-5 bg-gray-300 text-black hover:text-white hover:bg-black">
+              Read Paper
+            </Button> */}
+            <Link href="/create">
+              <Button className="text-lg rounded-full mt-5 font-bold bg-slate-500 text-white hover:bg-black">
+                Create Stablecoin
+              </Button>
+            </Link>
+            <PromptDialogBox>
+              Use Existing Stablecoin
+            </PromptDialogBox>
           </div>
         </div>
       </BackgroundBeamsWithCollision>

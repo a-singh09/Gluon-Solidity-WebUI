@@ -64,15 +64,7 @@ export default function Dashboard() {
                 { placeholder: "Vault Creator Fee" },
                 { placeholder: "Dev Fee" },
               ]}
-            />
-            <FormCard
-              title="Staking Vaults"
-              description="Addresses for neutron and proton staking vaults."
-              inputs={[
-                { placeholder: "Neutron Staking Vault Address" },
-                { placeholder: "Proton Staking Vault Address" },
-              ]}
-              footerButtonText="Save"
+              footerButtonText="Create Stablecoin"
             />
           </div>
         </div>
