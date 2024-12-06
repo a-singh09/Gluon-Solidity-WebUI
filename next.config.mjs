@@ -1,11 +1,12 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
-  output: "export",  // <=== enables static exports
-  reactStrictMode: true,
+  output: "export",
+  distDir: "out",
   images: {
-    loader: "custom",
-    loaderFile: "./src/loaders/cloudinary-loader.ts",
+    unoptimized: true,
   },
+  basePath: "/Gluon-Solidity-WebUI",
 };
 
 export default nextConfig;
