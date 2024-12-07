@@ -11,7 +11,7 @@ export default function Home() {
         <div className="flex flex-col items-center space-y-4">
           <div className="w-64 h-64 mb-4">
             <Image
-              src="/GluonProtocol-Darker_iewpww.svg"
+              src="GluonProtocol-Darker_iewpww.svg"
               alt="Gluon Protocol Logo"
               width={256}
               height={256}

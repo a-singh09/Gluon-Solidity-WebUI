@@ -25,7 +25,7 @@ export default function PromptDialogBox({ children }: PromptDialogBoxProps) {
 
   const handleContinue = () => {
     if (contractAddress) {
-      router.push(`/deployments/address#${contractAddress}`);
+      router.push(`/address#${contractAddress}`);
     }
   };
 
