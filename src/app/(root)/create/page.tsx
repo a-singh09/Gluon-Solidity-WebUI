@@ -19,6 +19,17 @@ export default function Dashboard() {
                 { placeholder: "Symbol" },
                 { placeholder: "Token Address (existing ERC-20 token)" },
               ]}
+              dropdowns={[
+                {
+                  placeholder: "Select Chains",
+                  options: [
+                    { value: "1", label: "Ethereum Mainnet" },
+                    { value: "56", label: "Binance Smart Chain" },
+                    { value: "137", label: "Polygon" },
+                    { value: "2001", label: "Milkomeda" },
+                  ],
+                },
+              ]}
             />
             <FormCard
               title="Stable Tokens"

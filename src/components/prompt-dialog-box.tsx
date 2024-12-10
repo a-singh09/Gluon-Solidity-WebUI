@@ -11,6 +11,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -20,12 +27,13 @@ interface PromptDialogBoxProps {
 }
 
 export default function PromptDialogBox({ children }: PromptDialogBoxProps) {
+  const [chainId, setChainId] = useState("");
   const [contractAddress, setContractAddress] = useState("");
   const router = useRouter();
 
   const handleContinue = () => {
     if (contractAddress) {
-      router.push(`/address#${contractAddress}`);
+      router.push(`/g#${chainId}#${contractAddress}`);
     }
   };
 
@@ -42,12 +50,24 @@ export default function PromptDialogBox({ children }: PromptDialogBoxProps) {
               Please enter the contract address of the stablecoin you want to use.
             </AlertDialogDescription>
           </AlertDialogHeader>
+          <Select onValueChange={(value) => setChainId(value)}>
+            <SelectTrigger className="my-2">
+              <SelectValue placeholder="Select Chain" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">Ethereum Mainnet</SelectItem>
+              <SelectItem value="56">Binance Smart Chain</SelectItem>
+              <SelectItem value="137">Polygon</SelectItem>
+              <SelectItem value="2001">Milkomeda</SelectItem>
+            </SelectContent>
+          </Select>
           <Input
             placeholder="0xABCD1234"
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
             className="my-2"
           />
+
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleContinue}>Continue</AlertDialogAction>
