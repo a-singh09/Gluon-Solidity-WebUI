@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Chains } from "@/lib/chains";
 
 interface PromptDialogBoxProps {
   children: React.ReactNode;
@@ -55,10 +56,11 @@ export default function PromptDialogBox({ children }: PromptDialogBoxProps) {
               <SelectValue placeholder="Select Chain" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Ethereum Mainnet</SelectItem>
-              <SelectItem value="56">Binance Smart Chain</SelectItem>
-              <SelectItem value="137">Polygon</SelectItem>
-              <SelectItem value="2001">Milkomeda</SelectItem>
+              {Chains.map((chain) => (
+                <SelectItem key={chain.value} value={chain.value}>
+                  {chain.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <Input

@@ -1,5 +1,6 @@
 import React from "react";
 import FormCard from "@/components/form-card";
+import { Chains } from "@/lib/chains";
 
 export default function Dashboard() {
   return (
@@ -22,12 +23,7 @@ export default function Dashboard() {
               dropdowns={[
                 {
                   placeholder: "Select Chains",
-                  options: [
-                    { value: "1", label: "Ethereum Mainnet" },
-                    { value: "56", label: "Binance Smart Chain" },
-                    { value: "137", label: "Polygon" },
-                    { value: "2001", label: "Milkomeda" },
-                  ],
+                  options: Chains.map(chain => ({ value: chain.value, label: chain.label })),
                 },
               ]}
             />
