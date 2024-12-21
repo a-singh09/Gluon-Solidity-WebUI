@@ -48,14 +48,13 @@
   <img src="https://img.shields.io/youtube/channel/subscribers/UCZOG4YhFQdlGaLugr_e5BKw?style=flat&logo=youtube&logoColor=white&logoSize=auto&labelColor=FF0000&color=FF0000" alt="Youtube Badge"></a>
 </p>
 
+&nbsp;
 <!-- Project core values and objective -->
-<blockquote align="center">
-  <div>&nbsp;</div>
+<p align="center">
   <strong>
-  <em>Gluon is a cryptocurrency stabilization protocol inspired by nuclear physics. It splits existing tokens into stable and unstable components, called "tokeons" (from "token" and "nucleon"), instead of issuing new tokens, <a href="https://www.youtube.com/watch?v=tnvm1we6xts">Know More By Dr. Bruno W. Paleo</a>.</em>
+  Gluon is a cryptocurrency stabilization protocol inspired by nuclear physics. It splits existing tokens into stable and unstable components, called "tokeons" (from "token" and "nucleon"), instead of issuing new tokens, <a href="https://www.youtube.com/watch?v=tnvm1we6xts">Know More By Dr. Bruno W. Paleo</a>.
   </strong>
-  <div>&nbsp;</div>
-</blockquote>
+</p>
 
 ---
 
