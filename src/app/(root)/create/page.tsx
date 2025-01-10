@@ -4,14 +4,14 @@ import React, { useState } from "react";
 import FormCard from "@/components/form-card";
 import { CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { isAddress } from "viem";
+import { isAddress, getAddress } from "viem";
 import { Chains } from "@/lib/chains";
-import { writeContract } from "@wagmi/core";
+import { writeContract, waitForTransactionReceipt } from "@wagmi/core";
 import { config } from "@/wagmi/config";
 import GluonTokenFactory from "@/out/GluonTokenFactory.sol/GluonTokenFactory.json";
 
 const { abi } = GluonTokenFactory;
-const factoryAddress = process.env.NEXT_PUBLIC_FACTORY_ADDRESS; // Replace with your factory contract address
+const factoryAddress = process.env.NEXT_PUBLIC_FACTORY_ADDRESS;
 
 export default function Dashboard() {
   const [allFormData, setAllFormData] = useState<{ [key: string]: any }>({});
@@ -81,7 +81,7 @@ export default function Dashboard() {
 
       const denominator = "1000000";
 
-      const result = await writeContract(config, {
+      const hash = await writeContract(config, {
         abi,
         address: factoryAddress as `0x${string}`,
         functionName: "createGluonReactor",
@@ -106,7 +106,19 @@ export default function Dashboard() {
         ],
       });
 
-      console.log("Transaction Result:", result);
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      const deployedAddress = receipt.logs[0]?.topics[1];
+      if (!deployedAddress) {
+        console.log("Failed to get deployed address");
+      }
+
+      const formattedAddress = getAddress(`0x${deployedAddress?.slice(26)}`);
+
+      console.log("Transaction Hash:", hash);
+      console.log("Receipt: ", receipt);
+      console.log("Deployed Contract Address:", formattedAddress);
+
     } catch (error) {
       console.error("Error:", error);
     } finally {
