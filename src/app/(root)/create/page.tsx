@@ -145,15 +145,6 @@ export default function Dashboard() {
                 { placeholder: "Symbol" },
                 { placeholder: "Token Address (existing ERC-20 token)" },
               ]}
-              dropdowns={[
-                {
-                  placeholder: "Select Chains",
-                  options: Chains.map((chain) => ({
-                    value: chain.value,
-                    label: chain.label,
-                  })),
-                },
-              ]}
               onDataChange={(data) => updateFormData("erc20", data)}
             />
             <FormCard
