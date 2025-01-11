@@ -5,15 +5,16 @@ import FormCard from "@/components/form-card";
 import { CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { isAddress, getAddress } from "viem";
-import { Chains } from "@/lib/chains";
+import { getFactoryAddress } from '@/lib/chains';
 import { writeContract, waitForTransactionReceipt } from "@wagmi/core";
 import { config } from "@/wagmi/config";
 import GluonTokenFactory from "@/out/GluonTokenFactory.sol/GluonTokenFactory.json";
+import { useChainId } from 'wagmi';
 
 const { abi } = GluonTokenFactory;
-const factoryAddress = process.env.NEXT_PUBLIC_FACTORY_ADDRESS;
 
 export default function Dashboard() {
+  const chainId = useChainId();
   const [allFormData, setAllFormData] = useState<{ [key: string]: any }>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -80,6 +81,11 @@ export default function Dashboard() {
       };
 
       const denominator = "1000000";
+
+      const factoryAddress = getFactoryAddress(chainId);
+      if (!factoryAddress) {
+        throw new Error('Factory not deployed on this chain');
+      }
 
       const hash = await writeContract(config, {
         abi,
