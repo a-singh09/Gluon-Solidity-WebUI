@@ -1,14 +1,145 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import FormCard from "@/components/form-card";
-import { Chains } from "@/lib/chains";
+import { CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { isAddress, getAddress } from "viem";
+import { getFactoryAddress } from '@/lib/chains';
+import { writeContract, waitForTransactionReceipt } from "@wagmi/core";
+import { config } from "@/wagmi/config";
+import GluonTokenFactory from "@/out/GluonTokenFactory.sol/GluonTokenFactory.json";
+import { useChainId } from 'wagmi';
+
+const { abi } = GluonTokenFactory;
 
 export default function Dashboard() {
+  const chainId = useChainId();
+  const [allFormData, setAllFormData] = useState<{ [key: string]: any }>({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const updateFormData = (section: string, data: any) => {
+    setAllFormData((prev) => ({
+      ...prev,
+      [section]: data,
+    }));
+  };
+
+  const validateAddress = (address: string | undefined): boolean => {
+    if (!address) return false;
+    return isAddress(address);
+  };
+
+  const handleSubmit = async () => {
+    // Combine all form sections
+    const formData = {
+      ...allFormData.erc20,
+      ...allFormData.stable,
+      ...allFormData.reserve,
+      ...allFormData.treasury,
+      ...allFormData.ratios,
+      ...allFormData.fees,
+    };
+
+    console.log("Submitted Form Data:", formData);
+
+    try {
+      setIsSubmitting(true);
+
+      console.log("Raw form data:", allFormData);
+
+      if (!formData) {
+        throw new Error("Kindly fill all the fields");
+      }
+
+      if (!validateAddress(formData?.token_address_existing_erc_20_token)) {
+        throw new Error("Invalid token address format");
+      }
+
+      if (!validateAddress(formData?.treasury_address)) {
+        throw new Error("Invalid treasury address format");
+      }
+
+      // Prepare contract parameters with default values
+      const params = {
+        tokenAddress: formData.token_address_existing_erc_20_token,
+        neutronName: formData.name || "",
+        neutronSymbol: formData.symbol || "",
+        protonName: formData.name || "",
+        protonSymbol: formData.symbol || "",
+        treasury: formData.treasury_address,
+        initialTreasuryFee: formData.initial_treasury_fee || "0",
+        treasuryRevenueTarget: formData.treasury_revenue_target || "0",
+        criticalRatio: formData.critical_ratio || "0",
+        targetRatio: formData.target_ratio || "0",
+        feeFission: formData.fee_for_fission || "0",
+        feeFusion: formData.fee_for_fusion || "0",
+        decayRate: formData.decay_rate || "0",
+        vaultFee: formData.reserve_fee || "0",
+        vaultCreatorFee: formData.vault_creator_fee || "0",
+        stableOrderFee: formData.dev_fee || "0",
+      };
+
+      const denominator = "1000000";
+
+      const factoryAddress = getFactoryAddress(chainId);
+      if (!factoryAddress) {
+        throw new Error('Factory not deployed on this chain');
+      }
+
+      const hash = await writeContract(config, {
+        abi,
+        address: factoryAddress as `0x${string}`,
+        functionName: "createGluonReactor",
+        args: [
+          params.tokenAddress,
+          params.neutronName,
+          params.neutronSymbol,
+          params.protonName,
+          params.protonSymbol,
+          parseInt(denominator),
+          params.treasury,
+          parseInt(params.initialTreasuryFee),
+          parseInt(params.treasuryRevenueTarget),
+          parseInt(params.criticalRatio),
+          parseInt(params.targetRatio),
+          parseInt(params.feeFission),
+          parseInt(params.feeFusion),
+          parseInt(params.decayRate),
+          parseInt(params.vaultFee),
+          parseInt(params.vaultCreatorFee),
+          parseInt(params.stableOrderFee),
+        ],
+      });
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      const deployedAddress = receipt.logs[0]?.topics[1];
+      if (!deployedAddress) {
+        console.log("Failed to get deployed address");
+      }
+
+      const formattedAddress = getAddress(`0x${deployedAddress?.slice(26)}`);
+
+      console.log("Transaction Hash:", hash);
+      console.log("Receipt: ", receipt);
+      console.log("Deployed Contract Address:", formattedAddress);
+
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
         <div className="mx-auto grid w-full max-w-6xl gap-2">
           <h1 className="text-3xl font-semibold">Create New Deployment</h1>
-          <h3 className="text-pretty text-base ml-1 text-zinc-400">Fill this form to create new Deployment</h3>
+          <h3 className="text-pretty text-base ml-1 text-zinc-400">
+            Fill this form to create new Deployment
+          </h3>
         </div>
         <div className="mx-auto w-full max-w-6xl items-start gap-6">
           <div className="grid gap-6">
@@ -20,28 +151,19 @@ export default function Dashboard() {
                 { placeholder: "Symbol" },
                 { placeholder: "Token Address (existing ERC-20 token)" },
               ]}
-              dropdowns={[
-                {
-                  placeholder: "Select Chains",
-                  options: Chains.map(chain => ({ value: chain.value, label: chain.label })),
-                },
-              ]}
+              onDataChange={(data) => updateFormData("erc20", data)}
             />
             <FormCard
               title="Stable Tokens"
               description="Details about stable tokens (neutrons) to be minted"
-              inputs={[
-                { placeholder: "Name" },
-                { placeholder: "Symbol" },
-              ]}
+              inputs={[{ placeholder: "Name" }, { placeholder: "Symbol" }]}
+              onDataChange={(data) => updateFormData("stable", data)}
             />
             <FormCard
               title="Reserve Tokens"
               description="Details about reserve tokens (protons) to be minted"
-              inputs={[
-                { placeholder: "Name" },
-                { placeholder: "Symbol" },
-              ]}
+              inputs={[{ placeholder: "Name" }, { placeholder: "Symbol" }]}
+              onDataChange={(data) => updateFormData("reserve", data)}
             />
             <FormCard
               title="Treasury Details"
@@ -51,6 +173,7 @@ export default function Dashboard() {
                 { placeholder: "Initial Treasury Fee" },
                 { placeholder: "Treasury Revenue Target" },
               ]}
+              onDataChange={(data) => updateFormData("treasury", data)}
             />
             <FormCard
               title="Ratios and Fees"
@@ -62,6 +185,7 @@ export default function Dashboard() {
                 { placeholder: "Fee for Fusion" },
                 { placeholder: "Decay Rate" },
               ]}
+              onDataChange={(data) => updateFormData("ratios", data)}
             />
             <FormCard
               title="Additional Fees"
@@ -71,8 +195,13 @@ export default function Dashboard() {
                 { placeholder: "Vault Creator Fee" },
                 { placeholder: "Dev Fee" },
               ]}
-              footerButtonText="Create Stablecoin"
+              onDataChange={(data) => updateFormData("fees", data)}
             />
+            <CardFooter className="px-2 py-1">
+              <Button onClick={handleSubmit}>
+                {isSubmitting ? "Creating..." : "Create Stablecoin"}
+              </Button>
+            </CardFooter>
           </div>
         </div>
       </main>
