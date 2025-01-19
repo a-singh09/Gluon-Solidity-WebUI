@@ -1,10 +1,18 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { MoveRight, MoveLeft } from "lucide-react";
+import { useAccount } from "wagmi";
+import { writeContract, readContract, waitForTransactionReceipt } from "@wagmi/core";
+import { config } from "@/wagmi/config";
 import InteractionCardComponent from "./interaction-card";
 import { Button } from "@/components/ui/button";
 import Metrics from "./metrics";
 import Footer from "./footer";
+import GluonReactor from "@/blockchain/GluonReactor.sol/GluonReactor.json";
+import ERC20 from "@/blockchain/ERC20.sol/ERC20.json";
+
+const { abi } = GluonReactor;
+const { erc20Abi } = ERC20;
 
 export default function Interaction({
   chainId,
@@ -13,6 +21,7 @@ export default function Interaction({
   chainId: string;
   deploymentAddress: string;
 }) {
+  const { address } = useAccount();
   const [operation, setOperation] = useState<
     "fission" | "fusion" | "stake" | "unstake"
   >("fission");
@@ -21,11 +30,28 @@ export default function Interaction({
   const [reserveToken, setReserveToken] = useState<string>("");
   const [stakedStableToken, setStakedStableToken] = useState<string>("");
   const [stakedReserveToken, setStakedReserveToken] = useState<string>("");
+  const [tokenAddress, setTokenAddress] = useState<`0x${string}` | null>(null);
 
   const isFissionMode = operation === "fission";
   const isFusionMode = operation === "fusion";
   const isStakeMode = operation === "stake";
   const isUnstakeMode = operation === "unstake";
+
+  useEffect(() => {
+    const fetchTokenAddress = async () => {
+      try {
+        const tokenAddress = await readContract(config, {
+          address: deploymentAddress as `0x${string}`,
+          abi,
+          functionName: 'tokenAddress',
+        }) as `0x${string}`;
+        setTokenAddress(tokenAddress);
+      } catch (error) {
+        console.error("Failed to fetch token address");
+      }
+    };
+    fetchTokenAddress();
+  }, [deploymentAddress]);
 
   const handleOperationSwitch = (newOperation: typeof operation) => {
     setOperation(newOperation);
@@ -36,8 +62,69 @@ export default function Interaction({
     setStakedReserveToken("");
   };
 
-  const handleExecute = () => {
+  const handleExecute = async () => {
     console.log("Executing:", operation);
+    if (!address) {
+      console.error("No wallet connected");
+      return;
+    }
+
+    try {
+      const approvalTx = await writeContract(config, {
+        address: tokenAddress as `0x${string}`,
+        abi: erc20Abi,
+        functionName: 'approve',
+        args: [deploymentAddress as `0x${string}`, BigInt(baseToken)],
+      });
+      await waitForTransactionReceipt(config, { hash: approvalTx });
+      console.log("Tokens approved:", approvalTx);
+    } catch (error) {
+      console.error("Token approval failed:", error);
+    }
+
+    if (isFissionMode) {
+      try {
+        const hash = await writeContract(config, {
+          abi,
+          address: deploymentAddress as `0x${string}`,
+          functionName: "fission",
+          args: [
+            address, // use connected wallet address as receiver
+            BigInt(baseToken), //amount
+            BigInt(0), // feeUI
+            "0x0000000000000000000000000000000000000000" as `0x${string}` // ui address
+          ],
+          value: BigInt(0)
+        });
+
+        const receipt = await waitForTransactionReceipt(config, { hash });
+        console.log("Fission successful:", receipt);
+      } catch (error) {
+        console.error("Fission failed:", error);
+      }
+    }
+
+    if (isFusionMode) {
+      try {
+        const hash = await writeContract(config, {
+          abi,
+          address: deploymentAddress as `0x${string}`,
+          functionName: "fusion",
+          args: [
+            BigInt(baseToken), // amount
+            address, // receiver (user's address)
+            BigInt(0), // feeUI
+            "0x0000000000000000000000000000000000000000" as `0x${string}` // ui address
+          ],
+          value: BigInt(0)
+        });
+
+        const receipt = await waitForTransactionReceipt(config, { hash });
+        console.log("Fusion successful:", receipt);
+      } catch (error) {
+        console.error("Fusion failed:", error);
+      }
+    }
   };
 
   const metrics = [
@@ -77,7 +164,7 @@ export default function Interaction({
             onChange={(e) => setBaseToken(e.target.value)}
             balance="20"
             tokenName="XYZ"
-            isEditable={isFissionMode}
+            isEditable={isFusionMode || isFissionMode}
             isRelevant={isFissionMode || isFusionMode}
           />
 
@@ -110,7 +197,7 @@ export default function Interaction({
               onChange={(e) => setStableToken(e.target.value)}
               balance="20"
               tokenName="XYZN"
-              isEditable={isFusionMode || isStakeMode}
+              isEditable={isStakeMode}
               isRelevant={true}
             />
             <InteractionCardComponent
@@ -119,7 +206,7 @@ export default function Interaction({
               onChange={(e) => setReserveToken(e.target.value)}
               balance="20"
               tokenName="XYZP"
-              isEditable={isFusionMode || isStakeMode}
+              isEditable={isStakeMode}
               isRelevant={true}
             />
             <Button

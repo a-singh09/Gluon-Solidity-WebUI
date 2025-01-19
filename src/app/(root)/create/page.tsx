@@ -8,7 +8,7 @@ import { isAddress, getAddress } from "viem";
 import { getFactoryAddress } from '@/lib/chains';
 import { writeContract, waitForTransactionReceipt } from "@wagmi/core";
 import { config } from "@/wagmi/config";
-import GluonTokenFactory from "@/out/GluonTokenFactory.sol/GluonTokenFactory.json";
+import GluonTokenFactory from "@/blockchain/GluonTokenFactory.sol/GluonTokenFactory.json";
 import { useChainId } from 'wagmi';
 
 const { abi } = GluonTokenFactory;
@@ -75,12 +75,11 @@ export default function Dashboard() {
         feeFission: formData.fee_for_fission || "0",
         feeFusion: formData.fee_for_fusion || "0",
         decayRate: formData.decay_rate || "0",
+        denominator: formData.denominator || "1000000000000000000",
         vaultFee: formData.reserve_fee || "0",
         vaultCreatorFee: formData.vault_creator_fee || "0",
         stableOrderFee: formData.dev_fee || "0",
       };
-
-      const denominator = "1000000";
 
       const factoryAddress = getFactoryAddress(chainId);
       if (!factoryAddress) {
@@ -97,7 +96,7 @@ export default function Dashboard() {
           params.neutronSymbol,
           params.protonName,
           params.protonSymbol,
-          parseInt(denominator),
+          parseInt(params.denominator),
           params.treasury,
           parseInt(params.initialTreasuryFee),
           parseInt(params.treasuryRevenueTarget),
@@ -110,6 +109,7 @@ export default function Dashboard() {
           parseInt(params.vaultCreatorFee),
           parseInt(params.stableOrderFee),
         ],
+        value: BigInt(0),
       });
 
       const receipt = await waitForTransactionReceipt(config, { hash });
@@ -184,6 +184,7 @@ export default function Dashboard() {
                 { placeholder: "Fee for Fission" },
                 { placeholder: "Fee for Fusion" },
                 { placeholder: "Decay Rate" },
+                { placeholder: "Denominator" },
               ]}
               onDataChange={(data) => updateFormData("ratios", data)}
             />
