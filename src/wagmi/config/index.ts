@@ -16,7 +16,7 @@ const metadata = {
 const isDevelopment = process.env.NODE_ENV === "development";
 
 const productionChains = [mainnet, sepolia] as const;
-const developmentChains = [foundry] as const;
+const developmentChains = [foundry, sepolia] as const;
 
 const selectedChains = isDevelopment ? developmentChains : productionChains;
 

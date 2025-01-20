@@ -1,8 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { MoveRight, MoveLeft } from "lucide-react";
-import { useAccount } from "wagmi";
-import { writeContract, readContract, waitForTransactionReceipt } from "@wagmi/core";
+import { useAccount, useChainId, useSwitchChain } from "wagmi";
+import {
+  writeContract,
+  readContract,
+  waitForTransactionReceipt,
+} from "@wagmi/core";
 import { config } from "@/wagmi/config";
 import InteractionCardComponent from "./interaction-card";
 import { Button } from "@/components/ui/button";
@@ -22,6 +26,9 @@ export default function Interaction({
   deploymentAddress: string;
 }) {
   const { address } = useAccount();
+  const currentChainId = useChainId();
+  const targetChainId = Number(chainId);
+  const { switchChain } = useSwitchChain();
   const [operation, setOperation] = useState<
     "fission" | "fusion" | "stake" | "unstake"
   >("fission");
@@ -38,20 +45,30 @@ export default function Interaction({
   const isUnstakeMode = operation === "unstake";
 
   useEffect(() => {
+      if (currentChainId !== targetChainId) {
+        if (switchChain) {
+          switchChain({ chainId: targetChainId });
+          console.log(`Your wallet chain id was changed to ${targetChainId}`);
+        } else {
+          console.error("This network is not available.");
+        }
+        return;
+      }
+
     const fetchTokenAddress = async () => {
       try {
-        const tokenAddress = await readContract(config, {
+        const tokenAddress = (await readContract(config, {
           address: deploymentAddress as `0x${string}`,
           abi,
-          functionName: 'tokenAddress',
-        }) as `0x${string}`;
+          functionName: "tokenAddress",
+        })) as `0x${string}`;
         setTokenAddress(tokenAddress);
       } catch (error) {
         console.error("Failed to fetch token address");
       }
     };
     fetchTokenAddress();
-  }, [deploymentAddress]);
+  }, [deploymentAddress, currentChainId, targetChainId, switchChain]);
 
   const handleOperationSwitch = (newOperation: typeof operation) => {
     setOperation(newOperation);
@@ -73,7 +90,7 @@ export default function Interaction({
       const approvalTx = await writeContract(config, {
         address: tokenAddress as `0x${string}`,
         abi: erc20Abi,
-        functionName: 'approve',
+        functionName: "approve",
         args: [deploymentAddress as `0x${string}`, BigInt(baseToken)],
       });
       await waitForTransactionReceipt(config, { hash: approvalTx });
@@ -92,9 +109,9 @@ export default function Interaction({
             address, // use connected wallet address as receiver
             BigInt(baseToken), //amount
             BigInt(0), // feeUI
-            "0x0000000000000000000000000000000000000000" as `0x${string}` // ui address
+            "0x0000000000000000000000000000000000000000" as `0x${string}`, // ui address
           ],
-          value: BigInt(0)
+          value: BigInt(0),
         });
 
         const receipt = await waitForTransactionReceipt(config, { hash });
@@ -114,9 +131,9 @@ export default function Interaction({
             BigInt(baseToken), // amount
             address, // receiver (user's address)
             BigInt(0), // feeUI
-            "0x0000000000000000000000000000000000000000" as `0x${string}` // ui address
+            "0x0000000000000000000000000000000000000000" as `0x${string}`, // ui address
           ],
-          value: BigInt(0)
+          value: BigInt(0),
         });
 
         const receipt = await waitForTransactionReceipt(config, { hash });
