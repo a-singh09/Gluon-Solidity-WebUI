@@ -285,7 +285,7 @@ export default function Interaction({
           <Metrics metrics={metrics} />
         </div>
       </div>
-      <Footer chainId={chainId} deploymentAddress={deploymentAddress} />
+      <Footer chainId={chainId} deploymentAddress={deploymentAddress} tokenAddress={tokenAddress}/>
     </>
   );
 }
