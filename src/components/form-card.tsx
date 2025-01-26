@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 interface FormCardProps {
   title: string;
   description: string;
-  inputs: { placeholder: string }[];
+  inputs: { placeholder: string; type?: string }[];
   onDataChange: (data: any) => void;
 }
 
@@ -52,6 +52,7 @@ const FormCard: React.FC<FormCardProps> = ({
             key={index}
             name={sanitizeInputName(input.placeholder)}
             placeholder={input.placeholder}
+            type={input.type || "text"}
             className="my-2"
             onChange={handleInputChange}
             value={formData[sanitizeInputName(input.placeholder)] || ""}
