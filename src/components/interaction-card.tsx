@@ -16,6 +16,7 @@ interface InteractionCardComponentProps {
   tokenName?: string;
   isEditable?: boolean;
   isRelevant?: boolean;
+  disabled?: boolean;
 }
 
 const InteractionCardComponent: React.FC<InteractionCardComponentProps> = ({
@@ -26,6 +27,7 @@ const InteractionCardComponent: React.FC<InteractionCardComponentProps> = ({
   balance,
   isEditable = true,
   isRelevant = true,
+  disabled = false
 }) => {
   return (
     <Card
@@ -47,6 +49,7 @@ const InteractionCardComponent: React.FC<InteractionCardComponentProps> = ({
               step="1"
               readOnly={!isEditable}
               placeholder="0.00"
+              disabled={disabled}
               onKeyPress={(e) => {
                 // Allow only digits and control keys (backspace, delete, etc.)
                 if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {

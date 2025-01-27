@@ -38,6 +38,7 @@ export default function Interaction({
   const [stakedStableToken, setStakedStableToken] = useState<string>("");
   const [stakedReserveToken, setStakedReserveToken] = useState<string>("");
   const [tokenAddress, setTokenAddress] = useState<`0x${string}` | null>(null);
+  const [activeField, setActiveField] = useState<string | null>(null);
 
   const isFissionMode = operation === "fission";
   const isFusionMode = operation === "fusion";
@@ -77,7 +78,36 @@ export default function Interaction({
     setReserveToken("");
     setStakedStableToken("");
     setStakedReserveToken("");
+    setActiveField(null);
   };
+
+  const handleInputChange = (value: string, field: string) => {
+    if (value === "") {
+      setActiveField(null);
+    } else {
+      setActiveField(field);
+    }
+
+    switch (field) {
+      case "baseToken":
+        setBaseToken(value);
+        break;
+      case "stableToken":
+        setStableToken(value);
+        break;
+      case "reserveToken":
+        setReserveToken(value);
+        break;
+      case "stakedStableToken":
+        setStakedStableToken(value);
+        break;
+      case "stakedReserveToken":
+        setStakedReserveToken(value);
+        break;
+      default:
+        break;
+    }
+  }
 
   const handleExecute = async () => {
     console.log("Executing:", operation);
@@ -178,11 +208,12 @@ export default function Interaction({
           <InteractionCardComponent
             title="Base Token"
             value={baseToken}
-            onChange={(e) => setBaseToken(e.target.value)}
+            onChange={(e) => handleInputChange(e.target.value, "baseToken")}
             balance="20"
             tokenName="XYZ"
             isEditable={isFusionMode || isFissionMode}
             isRelevant={isFissionMode || isFusionMode}
+            disabled={activeField ? activeField !== "baseToken" : false}
           />
 
           {/* Arrow & Execute Button */}
@@ -211,20 +242,22 @@ export default function Interaction({
             <InteractionCardComponent
               title="Stable Token (Neutron)"
               value={stableToken}
-              onChange={(e) => setStableToken(e.target.value)}
+              onChange={(e) => handleInputChange(e.target.value, "stableToken")}
               balance="20"
               tokenName="XYZN"
               isEditable={isStakeMode}
               isRelevant={true}
+              disabled={activeField ? activeField !== "stableToken" : false}
             />
             <InteractionCardComponent
               title="Reserve Token (Proton)"
               value={reserveToken}
-              onChange={(e) => setReserveToken(e.target.value)}
+              onChange={(e) => handleInputChange(e.target.value, "reserveToken")}
               balance="20"
               tokenName="XYZP"
               isEditable={isStakeMode}
               isRelevant={true}
+              disabled={activeField ? activeField !== "reserveToken" : false}
             />
             <Button
               // variant="destructive"
@@ -262,20 +295,22 @@ export default function Interaction({
               <InteractionCardComponent
                 title="Staked Stable Token"
                 value={stakedStableToken}
-                onChange={(e) => setStakedStableToken(e.target.value)}
+                onChange={(e) => handleInputChange(e.target.value, "stakedStableToken")}
                 balance="20"
                 tokenName="hXYZN"
                 isEditable={isUnstakeMode}
                 isRelevant={isStakeMode || isUnstakeMode}
+                disabled={activeField ? activeField !== "stakedStableToken" : false}
               />
               <InteractionCardComponent
                 title="Staked Reserve Token"
                 value={stakedReserveToken}
-                onChange={(e) => setStakedReserveToken(e.target.value)}
+                onChange={(e) => handleInputChange(e.target.value, "stakedReserveToken")}
                 balance="20"
                 tokenName="hXYZP"
                 isEditable={isUnstakeMode}
                 isRelevant={isStakeMode || isUnstakeMode}
+                disabled={activeField ? activeField !== "stakedReserveToken" : false}
               />
             </div>
           </div>
