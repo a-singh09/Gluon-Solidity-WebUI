@@ -172,6 +172,82 @@ export default function Interaction({
         console.error("Fusion failed:", error);
       }
     }
+
+    if (isStakeMode && stableToken.length !=0) {
+      try {
+        const hash = await writeContract(config, {
+          abi,
+          address: deploymentAddress as `0x${string}`,
+          functionName: "stakeNeutron",
+          args: [
+            stableToken
+          ],
+          value: BigInt(0),
+        });
+
+        const receipt = await waitForTransactionReceipt(config, { hash });
+        console.log("Stable Token Stake successful:", receipt);
+      } catch (error) {
+        console.error("Stable Token Stake failed:", error);
+      }
+    }
+
+    if (isStakeMode && reserveToken.length !=0) {
+      try {
+        const hash = await writeContract(config, {
+          abi,
+          address: deploymentAddress as `0x${string}`,
+          functionName: "stakeProton",
+          args: [
+            reserveToken
+          ],
+          value: BigInt(0),
+        });
+
+        const receipt = await waitForTransactionReceipt(config, { hash });
+        console.log("Reserve Token Stake successful:", receipt);
+      } catch (error) {
+        console.error("Reserve Token Stake failed:", error);
+      }
+    }
+
+    if (isUnstakeMode && stakedStableToken.length !=0) {
+      try {
+        const hash = await writeContract(config, {
+          abi,
+          address: deploymentAddress as `0x${string}`,
+          functionName: "stakeNeutron",
+          args: [
+            stableToken
+          ],
+          value: BigInt(0),
+        });
+
+        const receipt = await waitForTransactionReceipt(config, { hash });
+        console.log("Stable Token Stake successful:", receipt);
+      } catch (error) {
+        console.error("Stable Token Stake failed:", error);
+      }
+    }
+
+    if (isUnstakeMode && stakedReserveToken.length !=0) {
+      try {
+        const hash = await writeContract(config, {
+          abi,
+          address: deploymentAddress as `0x${string}`,
+          functionName: "stakeProton",
+          args: [
+            reserveToken
+          ],
+          value: BigInt(0),
+        });
+
+        const receipt = await waitForTransactionReceipt(config, { hash });
+        console.log("Reserve Token Stake successful:", receipt);
+      } catch (error) {
+        console.error("Reserve Token Stake failed:", error);
+      }
+    }
   };
 
   const metrics = [
