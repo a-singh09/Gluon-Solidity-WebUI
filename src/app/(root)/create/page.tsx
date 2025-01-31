@@ -8,7 +8,7 @@ import { isAddress, getAddress } from "viem";
 import { getFactoryAddress } from '@/lib/chains';
 import { writeContract, waitForTransactionReceipt } from "@wagmi/core";
 import { config } from "@/wagmi/config";
-import GluonTokenFactory from "@/out/GluonTokenFactory.sol/GluonTokenFactory.json";
+import GluonTokenFactory from "@/blockchain/GluonTokenFactory.sol/GluonTokenFactory.json";
 import { useChainId } from 'wagmi';
 
 const { abi } = GluonTokenFactory;
@@ -68,19 +68,18 @@ export default function Dashboard() {
         protonName: formData.name || "",
         protonSymbol: formData.symbol || "",
         treasury: formData.treasury_address,
-        initialTreasuryFee: formData.initial_treasury_fee || "0",
-        treasuryRevenueTarget: formData.treasury_revenue_target || "0",
-        criticalRatio: formData.critical_ratio || "0",
-        targetRatio: formData.target_ratio || "0",
-        feeFission: formData.fee_for_fission || "0",
-        feeFusion: formData.fee_for_fusion || "0",
-        decayRate: formData.decay_rate || "0",
-        vaultFee: formData.reserve_fee || "0",
-        vaultCreatorFee: formData.vault_creator_fee || "0",
-        stableOrderFee: formData.dev_fee || "0",
+        initialTreasuryFee: formData.initial_treasury_fee || 0,
+        treasuryRevenueTarget: formData.treasury_revenue_target || 0,
+        criticalRatio: formData.critical_ratio || 0,
+        targetRatio: formData.target_ratio || 0,
+        feeFission: formData.fee_for_fission || 0,
+        feeFusion: formData.fee_for_fusion || 0,
+        decayRate: formData.decay_rate || 0,
+        denominator: formData.denominator || 1000000000000000000,
+        vaultFee: formData.reserve_fee || 0,
+        vaultCreatorFee: formData.vault_creator_fee || 0,
+        stableOrderFee: formData.dev_fee || 0,
       };
-
-      const denominator = "1000000";
 
       const factoryAddress = getFactoryAddress(chainId);
       if (!factoryAddress) {
@@ -97,7 +96,7 @@ export default function Dashboard() {
           params.neutronSymbol,
           params.protonName,
           params.protonSymbol,
-          parseInt(denominator),
+          parseInt(params.denominator),
           params.treasury,
           parseInt(params.initialTreasuryFee),
           parseInt(params.treasuryRevenueTarget),
@@ -110,6 +109,7 @@ export default function Dashboard() {
           parseInt(params.vaultCreatorFee),
           parseInt(params.stableOrderFee),
         ],
+        value: BigInt(0),
       });
 
       const receipt = await waitForTransactionReceipt(config, { hash });
@@ -170,8 +170,8 @@ export default function Dashboard() {
               description="Details related to the treasury configuration."
               inputs={[
                 { placeholder: "Treasury Address" },
-                { placeholder: "Initial Treasury Fee" },
-                { placeholder: "Treasury Revenue Target" },
+                { placeholder: "Initial Treasury Fee", type: "number" },
+                { placeholder: "Treasury Revenue Target", type: "number" },
               ]}
               onDataChange={(data) => updateFormData("treasury", data)}
             />
@@ -179,11 +179,12 @@ export default function Dashboard() {
               title="Ratios and Fees"
               description="Configuration of critical and target ratios, and fees for fission and fusion."
               inputs={[
-                { placeholder: "Critical Ratio" },
-                { placeholder: "Target Ratio" },
-                { placeholder: "Fee for Fission" },
-                { placeholder: "Fee for Fusion" },
-                { placeholder: "Decay Rate" },
+                { placeholder: "Critical Ratio", type: "number" },
+                { placeholder: "Target Ratio", type: "number" },
+                { placeholder: "Fee for Fission", type: "number" },
+                { placeholder: "Fee for Fusion", type: "number" },
+                { placeholder: "Decay Rate", type: "number" },
+                { placeholder: "Denominator", type: "number" },
               ]}
               onDataChange={(data) => updateFormData("ratios", data)}
             />
@@ -191,9 +192,9 @@ export default function Dashboard() {
               title="Additional Fees"
               description="Configuration of additional fees."
               inputs={[
-                { placeholder: "Reserve Fee" },
-                { placeholder: "Vault Creator Fee" },
-                { placeholder: "Dev Fee" },
+                { placeholder: "Reserve Fee", type: "number" },
+                { placeholder: "Vault Creator Fee", type: "number" },
+                { placeholder: "Dev Fee", type: "number" },
               ]}
               onDataChange={(data) => updateFormData("fees", data)}
             />
