@@ -10,6 +10,7 @@ import { writeContract, waitForTransactionReceipt } from "@wagmi/core";
 import { config } from "@/wagmi/config";
 import GluonTokenFactory from "@/blockchain/GluonTokenFactory.sol/GluonTokenFactory.json";
 import { useChainId } from 'wagmi';
+import { toast } from "@/hooks/use-toast";
 
 const { abi } = GluonTokenFactory;
 
@@ -125,8 +126,18 @@ export default function Dashboard() {
       console.log("Receipt: ", receipt);
       console.log("Deployed Contract Address:", formattedAddress);
 
+      toast({
+        title: "Deployed Contract Address",
+        description: formattedAddress,
+      })
+
     } catch (error) {
       console.error("Error:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Unknown error",
+      })
     } finally {
       setIsSubmitting(false);
     }
